@@ -2,7 +2,13 @@
 require('./library.php');
 session_start();
 
-$loginData = $_SESSION['form'];
+
+if (isset($_SESSION['form']) && $_SESSION['form'] !== '') {
+  $loginData = $_SESSION['form'];
+} else {
+  header('Location: login.php');
+  exit();
+}
 
 $db = dbconnect();
 $stmt = $db->prepare('select id, category_id, amount_history_type, date, title, amount from amount_histories where user_id=?');

@@ -16,7 +16,6 @@ if (!$success) {
   die($db->error);
 }
 $stmt->bind_result($id, $category_id, $amount_history_type, $date, $title, $amount);
-$result = $stmt->fetch();
 
 $amountTotal = 0;
 ?>

@@ -112,7 +112,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <p class="h2" style="margin-top: 10px">Update</p>
         <img src="./img/icon.jpeg" alt="icon" width="50px" class="mx-1">
       </div>
-      <a href="./logout.php" class="btn btn-link">ログアウト</a>
+      <div class="flex mx-1" style="align-items: baseline;">
+        <p class="h4" style="font-weight: bold;"><?php echo $loginData['name'] ?></p>
+        <a href="./logout.php" class="btn btn-link">ログアウト</a>
+      </div>
     </div>
     <p class="mt-1"><a href="./index.php" class="btn btn-secondary">一覧へ戻る</a></p>
     <form action="" method="post">

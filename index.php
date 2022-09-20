@@ -11,7 +11,7 @@ if (isset($_SESSION['form']) && $_SESSION['form'] !== '') {
 }
 
 $db = dbconnect();
-$stmt = $db->prepare('select id, category_id, amount_history_type, date, title, amount from amount_histories where user_id=?');
+$stmt = $db->prepare('select id, category_id, amount_history_type, date, title, amount from amount_histories where user_id=? and date between date_format(now(), "%Y-%m-01") and last_day(now())');
 if (!$stmt) :
   die($db->error);
 endif;
@@ -40,13 +40,18 @@ $amountTotal = 0;
 <body>
   <div class="container">
     <div style="display: flex; justify-content: space-between; align-items: center;">
-      <div style="display: flex;">
+      <div class="flex">
         <p class="h2" style="margin-top: 10px">List</p>
         <img src="./img/icon.jpeg" alt="icon" width="50px" class="mx-1">
       </div>
-      <a href="./logout.php" class="btn btn-link">ログアウト</a>
+      <div class="flex mx-1" style="align-items: baseline;">
+        <p class="h4" style="font-weight: bold;"><?php echo $loginData['name'] ?></p>
+        <a href="./logout.php" class="btn btn-link">ログアウト</a>
+      </div>
     </div>
     <p class="mt-1"><a href="./register.php" class="btn btn-primary">登録</a></p>
+
+    <p class="h3">【今月のデータ】</p>
     <table border="1"  class="table">
       <thead>
         <tr>

@@ -3,6 +3,7 @@ require('./library.php');
 session_start();
 
 $form = [
+  'name' => '',
   'email' => '',
   'password' => ''
 ];
@@ -36,6 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt->fetch();
 
     if (password_verify($form['password'], $hash)) {
+      $form['name'] = $name;
       $form['id'] = $id;
       $_SESSION['form'] = $form;
       header('Location: index.php');

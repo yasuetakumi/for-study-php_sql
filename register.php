@@ -79,18 +79,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 
 <body>
-  <div class="container" style="margin-top: 70px; margin-bottom: auto;">
-    <div style="display: flex; justify-content: space-between; align-items: center;">
-      <div style="display: flex;">
-        <p class="h2" style="margin-top: 10px">Register</p>
-        <img src="./img/icon.jpeg" alt="icon" width="50px" class="mx-1">
+  <?php include 'header.php' ?>
+  <div class="container" style="margin-top: 50px; margin-bottom: px;">
+
+      <div style="display: flex; justify-content: space-between;">
+        <p class="h2">登録</p>
+        <p><a href="./index.php" class="btn btn-secondary">一覧へ戻る</a></p>
       </div>
-      <div class="flex mx-1" style="align-items: baseline;">
-        <p class="h4" style="font-weight: bold;"><?php echo $loginData['name'] ?></p>
-        <a href="./logout.php" class="btn btn-link">ログアウト</a>
-      </div>
-    </div>
-    <p class="mt-1"><a href="./index.php" class="btn btn-secondary">一覧へ戻る</a></p>
+
     <form action="" method="post">
       <div style="margin-bottom: 50px;">
         <div class="radio">

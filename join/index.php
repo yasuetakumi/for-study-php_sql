@@ -31,6 +31,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   if ($form['password'] === '') {
     $error['password'] = 'blank';
   }
+  $password_correct = (!preg_match('/(?=.*[a-zA-Z])(?=.*[0-9])[a-zA-z0-9]{8,}/', $form['password']));
+  if ($password_correct) {
+    $error['password_format'] = 'correct';
+  }
 
   if (empty($error)) {
     $db = dbconnect();
@@ -68,25 +72,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <title>会員登録</title>
 </head>
 <body>
+  <nav class="navbar mx-3 text-center" style="justify-content: left;">
+    <img src="../img/icon.jpeg" alt="icon" width="50px" >
+    <div class="h3" style="font-weight: bold; margin: 20px">家計簿システム</div>
+  </nav>
+  <hr>
   <div class="container"> 
     <div class="text-center">
       <div class="h2 text-center">
-        <p>Register</p>
-        <div class="text-center">
-          <img src="../img/icon.jpeg" alt="login_icon" width="60px">
-        </div>
+        <p>アカウント登録</p>
       </div>
       <form action="" method="post" class="form-bg mb-3">
         <div class="text-left">
           <label class="text-left"><span class="require-text">*必須</span> : ニックネーム</label>
-          <input type="text" class="mb-3 form-control text-left" name="name" value="<?php echo h($form['name']); ?>">
+          <input type="text" class="form-control text-left" name="name" value="<?php echo h($form['name']); ?>">
           <?php if (isset($error['name']) && $error['name'] === 'blank'): ?>
             <p class="error-text">*ニックネームを入力してください</p>
           <?php endif; ?>
         </div>
         <div class="text-left">
           <label class="text-left"><span class="require-text">*必須</span> : メールアドレス</label>
-          <input type="text" class="mb-3 form-control text-left" name="email" value="<?php echo h($form['email']); ?>">
+          <input type="text" class="form-control text-left" name="email" value="<?php echo h($form['email']); ?>">
           <?php if (isset($error['email']) && $error['email'] === 'blank'): ?>
             <p class="error-text">*メールアドレスを入力してください</p>
           <?php endif; ?>
@@ -96,9 +102,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
         <div class="text-left">
           <label class="text-left"><span class="require-text">*必須</span> : パスワード</label>
-          <input type="password" class="mb-3 form-control text-left" name="password" value="<?php echo h($form['password']); ?>">
+          <input type="password" class="form-control text-left" name="password" value="<?php echo h($form['password']); ?>">
           <?php if (isset($error['password']) && $error['password'] === 'blank'): ?>
             <p class="error-text">*パスワードを入力してください</p>
+          <?php endif; ?>
+          <?php if (isset($error['password_format']) && $error['password_format'] === 'correct'): ?>
+            <p class="error-text">*パスワードは英数字8文字以上で入力して下さい。</p>
           <?php endif; ?>
         </div>
         <div><input type="submit" class="btn btn-primary" value="次へ"/></div>

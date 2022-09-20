@@ -11,12 +11,29 @@ if (isset($_SESSION['form']) && $_SESSION['form'] !== '') {
 }
 
 $db = dbconnect();
-$stmt = $db->prepare('select id, category_id, amount_history_type, date, title, amount from amount_histories where user_id=? and date between date_format(now(), "%Y-%m-01") and last_day(now())');
+$stmt = $db->prepare('select id, category_id, amount_history_type, date, title, amount from amount_histories where user_id=? and month(date) = ? and year(date) = year(current_date()) order by date asc');
 if (!$stmt) :
   die($db->error);
 endif;
 
-$stmt->bind_param('i', $loginData['id']);
+if ($_SESSION['month'] === '') {
+  $_SESSION['month'] = date('n');
+}
+
+// $_SESSION['month'] = '';
+
+$get = filter_input(INPUT_GET, 'page', FILTER_SANITIZE_NUMBER_INT);
+$m = (int)$_SESSION['month'] + (int)$get;
+if ($m >= 12) {
+  $m = 12;
+}
+if ($m <= 0) {
+  $m = 0;
+}
+
+$_SESSION['month'] = $m;
+
+$stmt->bind_param('ii', $loginData['id'], $m);
 $success = $stmt->execute();
 if (!$success) {
   die($db->error);
@@ -38,20 +55,19 @@ $amountTotal = 0;
 </head>
 
 <body>
+  <?php include 'header.php' ?> 
   <div class="container">
-    <div style="display: flex; justify-content: space-between; align-items: center;">
-      <div class="flex">
-        <p class="h2" style="margin-top: 10px">List</p>
-        <img src="./img/icon.jpeg" alt="icon" width="50px" class="mx-1">
+      <div class="flex" style="justify-content: space-between;">
+        <p class="h2">一覧</p>
+        <p><a href="./register.php" class="btn btn-primary">登録</a></p>
       </div>
-      <div class="flex mx-1" style="align-items: baseline;">
-        <p class="h4" style="font-weight: bold;"><?php echo $loginData['name'] ?></p>
-        <a href="./logout.php" class="btn btn-link">ログアウト</a>
+    <div class="flex" style="justify-content: space-between;">
+      <p class="h3" style="margin-top: 5px;">【<?php echo $m ;?>月のデータ】</p>
+      <div class="mb-3">
+        <a href="index.php?page=-1" class="btn btn-link">&lt; 先月</a>
+        <a href="index.php?page=1" class="btn btn-link">翌月 &gt;</a>
       </div>
     </div>
-    <p class="mt-1"><a href="./register.php" class="btn btn-primary">登録</a></p>
-
-    <p class="h3">【今月のデータ】</p>
     <table border="1"  class="table">
       <thead>
         <tr>

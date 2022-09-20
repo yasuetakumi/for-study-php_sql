@@ -36,13 +36,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <title>会員登録確認</title>
 </head>
 <body>
+  <nav class="navbar mx-3 text-center" style="justify-content: left;">
+    <img src="../img/icon.jpeg" alt="icon" width="50px" >
+    <div class="h3" style="font-weight: bold; margin: 20px">家計簿システム</div>
+  </nav>
+  <hr>
   <div class="container">
     <div class="text-center">
       <div class="h2 text-center">
-        <p>Check</p>
-        <div class="text-center">
-          <img src="../img/icon.jpeg" alt="icon" width="60px">
-        </div>
+        <p>登録確認</p>
       </div>
       <form action="" method="post" class="form-bg mb-3">
         <div class="text-left">

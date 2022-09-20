@@ -5,7 +5,8 @@ session_start();
 $form = [
   'name' => '',
   'email' => '',
-  'password' => ''
+  'password' => '',
+  'month'
 ];
 $error = [];
 
@@ -17,7 +18,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
   $form['password'] = filter_input(INPUT_POST, 'password', FILTER_SANITIZE_STRING);
   if ($form['password'] === '') {
-    $error['password'] = 'blank';
+    $error['password_empty'] = 'blank';
+  }
+  $password_correct = (!preg_match('/(?=.*[a-zA-Z])(?=.*[0-9])[a-zA-z0-9]{8,}/', $form['password']));
+  if ($password_correct) {
+    $error['password_format'] = 'correct';
   }
 
   if (!isset($error['email']) && !isset($error['password'])) {
@@ -60,13 +65,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 
 <body>
+  <?php include 'header.php' ?>
   <div class="container">
     <div class="text-center">
       <div class="h2 text-center">
-        <p>Login</p>
-        <div class="text-center">
-          <img src="./img/icon.jpeg" alt="icon" width="60px">
-        </div>
+        <p>ログイン</p>
       </div>
       <form action="" method="post" class="form-bg mb-3">
         <div class="text-left">
@@ -76,15 +79,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <p class="error-text">*メールアドレスを入力してください。</p>
           <?php endif; ?>
           <?php if (isset($error['login']) && $error['login'] === 'failed') : ?>
-            <p class="error-text">*ログインに失敗しました。正しく入力してください。</p>
+            <p class="error-text">*このメールアドレスはすでに登録されています。</p>
           <?php endif; ?>
         </div>
-        <div class="text-left">
+        <div class="text-left mb-3">
           <label class="text-left">パスワード</label>
-          <input type="password" class="form-control text-left mb-3" name="password" value="<?php echo h($form['password']); ?>">
-          <?php if (isset($error['password']) && $error['password'] === 'blank') : ?>
-            <p>* パスワードを入力してください。</p>
+          <input type="password" class="form-control text-left" name="password" value="<?php echo h($form['password']); ?>">
+          <?php if (isset($error['password_empty']) && $error['password_empty'] === 'blank') : ?>
+            <p class="error-text">*パスワードを入力してください。</p>
           <?php endif; ?>
+          <?php if (isset($error['password_format']) && $error['password_format'] === 'correct') : ?>
+            <p class="error-text">*パスワードは英数字8文字以上で入力して下さい。</p>
+          <?php endif ?>
         </div>
         <div>
           <input type="submit" value="ログインする" class="btn btn-primary">
